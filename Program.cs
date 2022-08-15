@@ -12,10 +12,7 @@ var app = builder.Build();
 
 var options = new JsonSerializerOptions(JsonSerializerDefaults.General);
 
-app.MapGet("/", () => Results.Text( @$"
-/todo   => Get List of todos
-/todo/[id]    => Get one todo by id
-"));
+// app.MapGet("/", () => Results.File());
 
 app.MapGet("/todo", async (TodoDbContext db) => await db.Todos.Select(t => new TodoDC(t)).ToListAsync());
 
