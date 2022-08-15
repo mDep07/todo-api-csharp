@@ -1,0 +1,23 @@
+GET http://localhost:5082/todo
+
+###
+
+GET http://localhost:5082/todo/2
+
+###
+
+POST http://localhost:5082/todo
+Content-Type: application/json
+
+{
+    "title": "Todo N° {{$randomInt 1 1000}}"
+}
+
+###
+
+PUT http://localhost:5082/todo/2
+Content-Type: application/json
+
+{
+    "title": "Todo N° two"
+}
