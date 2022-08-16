@@ -14,7 +14,10 @@ var options = new JsonSerializerOptions(JsonSerializerDefaults.General);
 
 // app.MapGet("/", () => Results.File());
 
-app.MapGet("/todo", async (TodoDbContext db) => await db.Todos.Select(t => new TodoDC(t)).ToListAsync());
+app.MapGet("/todo", async (TodoDbContext db) =>
+{
+    return await db.Todos.Select(t => new TodoDC(t)).ToListAsync();
+});
 
 // app.MapGet("/todoitems", async (TodoDbContext db) => await db.Todos.Select(t => new TodoDC(t)).ToListAsync());
 
@@ -63,6 +66,41 @@ app.MapDelete("/todo/{id}", async (int id, TodoDbContext db) =>
     return Results.Ok();
 });
 
+app.MapPut("/todo/{id}/complete", async (int id, TodoDbContext db) =>
+{
+    var todoUpdate = await db.Todos.FindAsync(id);
+    if(todoUpdate is null) return Results.NotFound();
+
+    if(todoUpdate.Deleted != null) return Results.Conflict("This todo is deleted");
+
+    todoUpdate.Updated = DateTime.Now;
+    todoUpdate.Completed = DateTime.Now;
+
+    await db.SaveChangesAsync();
+
+    return Results.Ok();
+});
+
+app.MapPut("/todo/{id}/start", async (int id, TodoDbContext db) =>
+{
+    var todoUpdate = await db.Todos.FindAsync(id);
+    if(todoUpdate is null) return Results.NotFound();
+
+    if(todoUpdate.Deleted != null) return Results.Conflict("This todo is deleted");
+    if(todoUpdate.Completed != null) return Results.Conflict("This todo is completed");
+
+    todoUpdate.Updated = DateTime.Now;
+    todoUpdate.Started = DateTime.Now;
+
+    await db.SaveChangesAsync();
+
+    return Results.Ok();
+});
+
 app.Run();
 
 
+class Query
+{
+    public bool? Completed { get; set; }
+}

@@ -6,4 +6,6 @@ class Todo : Entity
     public string Title { get; set; } = null!;
     public string? Description { get; set; }
     public DateTimeOffset? Completed { get; set; }
+    public DateTimeOffset? Started { get; set; }
+    public ICollection<Todo>? Childs { get; set; }
 }

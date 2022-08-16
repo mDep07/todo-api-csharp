@@ -7,9 +7,20 @@ class TodoDC : EntityDC
     public string Title { get; set; } = null!;
     public string? Description { get; set; }
     public DateTimeOffset? Completed { get; set; }
-    public DateTimeOffset? Deleted { get; set; }
+    public DateTimeOffset? Started { get; set; }
+    public TimeSpan? Duration
+    {
+        get => Started != null && Completed != null ? Completed - Started : null;
+    }
 
     public TodoDC() {}
-    public TodoDC(Todo todo) =>
-        (Id, Completed, Deleted, Title, Description) = (todo.Id, todo.Completed, todo.Deleted, todo.Title, todo.Description);
+    public TodoDC(Todo todo)
+    {
+        Id = todo.Id;
+        Completed = todo.Completed;
+        Started = todo.Started;
+        Deleted = todo.Deleted;
+        Title = todo.Title;
+        Description = todo.Description;
+    }
 }

@@ -1,11 +1,16 @@
+@Id = 0
+
+### Get all todos
 GET http://localhost:5082/todo
 
-###
+### Get todo by Id
+# @prompt todoId
+# @name getTodo
+GET http://localhost:5082/todo/{{todoId}}
 
-GET http://localhost:5082/todo/2
+Id = {{getTodo.request.body.id}}
 
-###
-
+### Add todo
 POST http://localhost:5082/todo
 Content-Type: application/json
 
@@ -13,11 +18,26 @@ Content-Type: application/json
     "title": "Todo N° {{$randomInt 1 1000}}"
 }
 
-###
-
-PUT http://localhost:5082/todo/2
+### Update todo
+PUT http://localhost:5082/todo/{{Id}}
 Content-Type: application/json
 
 {
     "title": "Todo N° two"
 }
+
+### Delete todo
+DELETE  http://localhost:5082/todo/{{Id}}
+Content-Type: application/json
+
+{
+    "title": "Todo N° two"
+}
+
+### Complete todo
+PUT http://localhost:5082/todo/{{Id}}/complete
+Content-Type: application/json
+
+### Start todo
+PUT http://localhost:5082/todo/{{Id}}/start
+Content-Type: application/json
