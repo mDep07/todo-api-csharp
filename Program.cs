@@ -10,18 +10,10 @@ builder.Services.AddDbContext<TodoDbContext>(opt => opt.UseInMemoryDatabase("Tod
 
 var app = builder.Build();
 
-var options = new JsonSerializerOptions(JsonSerializerDefaults.General);
-
-// app.MapGet("/", () => Results.File());
-
 app.MapGet("/todo", async (TodoDbContext db) =>
 {
     return await db.Todos.Select(t => new TodoDC(t)).ToListAsync();
 });
-
-// app.MapGet("/todoitems", async (TodoDbContext db) => await db.Todos.Select(t => new TodoDC(t)).ToListAsync());
-
-// app.MapGet("/todoitems/complete", async (TodoDbContext db) => await db.Todos.Where(t => t.IsComplete).ToListAsync());
 
 app.MapGet("/todo/{id}", async (int id, TodoDbContext db) =>
     await db.Todos.FindAsync(id)
